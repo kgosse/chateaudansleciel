@@ -1,5 +1,3 @@
-import { assertJSXClosingElement } from "../../../../../../Library/Caches/typescript/2.6/node_modules/@types/babel-types";
-
 // chateaudansleciel
 
 let MAX = 500
@@ -134,8 +132,6 @@ function handleMove(n, direction) {
             return n._steps
         }
     } 
-    if (r._state.isOver(r._pos))
-        return 0
     const left = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), LEFT)
     const up = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), UP)
     const right = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), RIGHT)
@@ -155,15 +151,18 @@ function minimumMoves(grid, startX, startY, goalX, goalY, n) {
         x: startX,
         y: startY
     })
+    if (r._state.isOver(r._pos))
+        return 0
+
     const left = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), LEFT)
     const up = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), UP)
     const right = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), RIGHT)
     const down = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), DOWN)
-    //console.log('left = ' + left + ' ; up = ' + up + ' ; right = ' + right + ' ; down = ' + down)
+    console.log('left = ' + left + ' ; up = ' + up + ' ; right = ' + right + ' ; down = ' + down)
     return min(left, up, right, down)
 }
 
 export default function main({ data, startX, startY, goalX, goalY, length: n }) {
-    //MAX = n * n * n
+    MAX = n * n * n
     return minimumMoves(data, startX, startY, goalX, goalY, n);
 }
