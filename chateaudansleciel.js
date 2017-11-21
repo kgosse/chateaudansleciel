@@ -44,9 +44,22 @@ class Grid {
         return matrix
     }
 
-    static create(grid) {
+    static cloneMatrix(data, len) {
+        let matrix = new Array(len)
+        for (let i = 0; i < len; ++i) {
+            matrix[i] = new Array(len)
+            for (let j = 0; j < len; ++j) {
+                matrix[i][j] = data[i][j]
+            }
+        }
+        //console.log(JSON.stringify(matrix))
+        return matrix
+    }
+
+    static create(grid, n) {
+
         return new Grid({
-            matrix: Array.from(grid._matrix),
+            matrix: Grid.cloneMatrix(grid._matrix, grid._length),
             goalX: grid._goal._x,
             goalY: grid._goal._y,
             length: grid._length
@@ -57,10 +70,10 @@ class Grid {
         const n = this._length
         //console.log('  x=' + p._x + ' y=' + p._y)
         if (p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n)
-        //console.log('  m[x][y] = ' + this._matrix[p._x][p._y])
-        return p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n && this._matrix[p._x][p._y] === 0
+            //console.log('  m[x][y] = ' + this._matrix[p._x][p._y])
+            return p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n && this._matrix[p._x][p._y] === 0
     }
-    
+
     isOver(p) {
         //console.log('     isOver: p=' + p + ' g=' + this._goal + ' val=' + this._goal.equals(p))
         return this._goal.equals(p)
@@ -78,14 +91,14 @@ class Node {
         this._steps = parent ? parent._steps : 1;
         this._state = state;
         this._pos = new Point(x, y)
-        this._prev = parent ? new Point(parent._prev._x, parent._prev._y) : new Point(x, y)        
+        this._prev = parent ? new Point(parent._prev._x, parent._prev._y) : new Point(x, y)
         this._state.mark(this._pos)
     }
 
     move(n) {
         //console.log('      p' + this._prev + ' n' + n)
         let p = this.parent ? this.parent.parent : this
-        p = !p ? this.parent : p 
+        p = !p ? this.parent : p
         if (p._prev._x != n._x && p._prev._y != n._y) {
             ++this._steps
             //console.log('inc steps: ' + this._steps)
@@ -93,6 +106,14 @@ class Node {
         this._prev = new Point(this._pos._x, this._pos._y)
         this._pos = new Point(n._x, n._y)
         this._state.mark(n)
+    }
+
+    generation() {
+        let p = this._parent
+        let count = 1
+        while (p = p._parent)
+            ++count
+        return count
     }
 }
 
@@ -121,17 +142,17 @@ function handleMove(n, direction) {
             break
     }
     if (next) {
-        //console.log('x = ' + next._x + ' y = ' + next._y)
+        //console.log(''.padStart(n.generation() * 2) + next)
         if (!n._state.canMove(next)) {
-            //console.log('returning MAX')
+            //console.log(''.padStart(n.generation() * 2) + 'returning MAX')
             return MAX
         }
         n.move(next)
         if (n._state.isOver(n._pos)) {
-            //console.log('returning ' + n._steps)
+            console.log(''.padStart(n.generation() * 2) + 'returning ' + n._steps)
             return n._steps
         }
-    } 
+    }
     const left = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), LEFT)
     const up = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), UP)
     const right = handleMove(new Node({ parent: n, x: n._pos._x, y: n._pos._y, state: Grid.create(n._state) }), RIGHT)
@@ -158,7 +179,7 @@ function minimumMoves(grid, startX, startY, goalX, goalY, n) {
     const up = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), UP)
     const right = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), RIGHT)
     const down = handleMove(new Node({ parent: r, x: r._pos._x, y: r._pos._y, state: Grid.create(r._state) }), DOWN)
-    console.log('left = ' + left + ' ; up = ' + up + ' ; right = ' + right + ' ; down = ' + down)
+    //console.log('left = ' + left + ' ; up = ' + up + ' ; right = ' + right + ' ; down = ' + down)
     return min(left, up, right, down)
 }
 
