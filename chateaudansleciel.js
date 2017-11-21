@@ -149,7 +149,7 @@ function handleMove(n, direction) {
         }
         n.move(next)
         if (n._state.isOver(n._pos)) {
-            console.log(''.padStart(n.generation() * 2) + 'returning ' + n._steps)
+            //console.log(''.padStart(n.generation() * 2) + 'returning ' + n._steps)
             return n._steps
         }
     }

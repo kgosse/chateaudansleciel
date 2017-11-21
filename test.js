@@ -50,7 +50,7 @@ const test3 = {
 }
 
 var assert = require('assert');
-describe.skip('n = 3', function() {
+describe('n = 3', function() {
   describe('TEST 1', function() {
     it('should return ' + test1.output, function() {
       assert.equal(test1.output, minimumMoves(test1));
