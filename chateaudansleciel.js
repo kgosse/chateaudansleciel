@@ -69,9 +69,12 @@ class Grid {
     canMove(p) {
         const n = this._length
         //console.log('  x=' + p._x + ' y=' + p._y)
-        if (p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n)
+        if (p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n) {
             //console.log('  m[x][y] = ' + this._matrix[p._x][p._y])
-            return p._x >= 0 && p._x < n && p._y >= 0 && p._y <= n && this._matrix[p._x][p._y] === 0
+            return this._matrix[p._x][p._y] === 0
+        } else {
+            return false
+        }
     }
 
     isOver(p) {
