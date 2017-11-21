@@ -20,6 +20,6 @@ npm test
 
 ## Challenge
 
-This nodejs code is not efficient. We have no response (not before hours) for test3 :-) 
-The idea is to improve the algorithm so that it will pass test3 in less than one second.
+This nodejs code is not efficient. We have no response (not before hours) for test101 :-) 
+The idea is to improve the algorithm so that it will pass test101 in less than one second.
 Thanks for your PR if you find the solution before me.
